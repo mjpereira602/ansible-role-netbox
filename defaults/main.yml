@@ -1,7 +1,7 @@
 ---
 # defaults file for lae.netbox
 netbox_stable: false
-netbox_stable_version: 3.0.12
+netbox_stable_version: 3.6.9
 netbox_stable_uri: "https://github.com/netbox-community/netbox/archive/v{{ netbox_stable_version }}.tar.gz"
 
 netbox_git: false
@@ -74,6 +74,9 @@ netbox_stable_path: "{{ netbox_releases_path }}/netbox-{{ netbox_stable_version 
 netbox_current_path: "{{ netbox_home }}/current"
 netbox_shared_path: "{{ netbox_home }}/shared"
 
+netbox_ssl_certificate: ""
+netbox_ssl_key: ""
+
 netbox_socket: "127.0.0.1:8000"
 netbox_protocol: http
 netbox_processes: "{{ ansible_processor_vcpus | default(1) }}"
@@ -102,3 +105,7 @@ netbox_keep_uwsgi_updated: false
 netbox_uwsgi_in_venv: false
 netbox_uwsgi_options: {}
 netbox_rqworker_processes: 1
+
+_netbox_uwsgi_pip_executable: omit
+_netbox_uwsgi_mime_file: ''
+

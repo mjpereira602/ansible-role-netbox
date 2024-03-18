@@ -14,6 +14,24 @@
     - "{{ _netbox_config.REPORTS_ROOT }}"
     - "{{ _netbox_config.SCRIPTS_ROOT }}"
 
+- name: Create ssl certificate and key if defined in host_vars
+  ansible.builtin.copy:
+    dest: "{{ netbox_shared_path }}/{{ item[0] }}"
+    content: "{{ item[1] }}"
+    owner: "{{ netbox_user }}"
+    group: "{{ netbox_group }}"
+    mode: u=r,g-rwx,o-rwx
+  when:
+    - item[1] | length > 0
+  notify:
+    - restart netbox.service
+    - restart netbox-rqworker.service
+  loop_control:
+    label: "{{ item[0] }}"
+  loop:
+    - [ "netbox.crt", "{{ netbox_ssl_certificate }}" ]
+    - [ "netbox.key", "{{ netbox_ssl_key }}" ]
+
 - include_tasks: "install_via_{{ 'git' if netbox_git else 'stable' }}.yml"
 
 - import_tasks: generate_secret_key.yml

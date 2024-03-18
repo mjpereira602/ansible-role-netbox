@@ -1,0 +1,53 @@
+{{ ansible_managed | comment }}
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType, LDAPGroupQuery
+
+"""
+Read the NetBox LDAP configuration documentation if you need assistance:
+http://netbox.readthedocs.io/en/latest/installation/ldap/
+
+This is just an example. Modify it to your liking and place it in your
+playbook's templates/ directory (or anywhere, but make sure
+"netbox_ldap_config_template" is configured to whatever location you place the
+template in should it not be in templates/.
+"""
+# Use variables like the below if you prefer:
+AUTH_LDAP_SERVER_URI = "{{ netbox_ldap_server_uri }}"
+
+# Or just store all your values in this file:
+#AUTH_LDAP_BIND_DN = "CN=NETBOXSA, OU=Service Accounts,DC=example,DC=com"
+AUTH_LDAP_BIND_DN = "{{ netbox_ldap_bind_dn }}"
+# I would however recommend putting passwords in vaulted variables.
+#AUTH_LDAP_BIND_PASSWORD = "demo"
+AUTH_LDAP_BIND_PASSWORD = "{{ netbox_ldap_bind_password }}"
+
+AUTH_LDAP_CONNECTION_OPTIONS = {
+    ldap.OPT_REFERRALS: 0
+}
+
+LDAP_IGNORE_CERT_ERRORS = True
+
+AUTH_LDAP_USER_DN_TEMPLATE = "{{ netbox_ldap_user_dn_template }}"
+
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
+
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("{{ netbox_ldap_group_search_basedn }}",
+                                    ldap.SCOPE_SUBTREE,
+                                    "{{ netbox_ldap_group_search_filter }}")
+
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+#AUTH_LDAP_REQUIRE_GROUP = "CN=NETBOX_USERS,DC=example,DC=com"
+
+AUTH_LDAP_FIND_GROUP_PERMS = True
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+AUTH_LDAP_MIRROR_GROUPS = True
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
+
+{{ netbox_ldap_additional_config }}
+
+# vim: ft=python

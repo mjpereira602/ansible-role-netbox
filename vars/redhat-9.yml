@@ -8,6 +8,7 @@ _netbox_packages:
   - libjpeg-devel
   - graphviz
   - openssl-devel
+  - mailcap
 _netbox_python_packages:
   - python3
   - python3-devel
@@ -18,3 +19,6 @@ _netbox_python_packages:
 _netbox_python_binary: /usr/bin/python3.9
 _netbox_ldap_packages:
   - openldap-devel
+
+_netbox_uwsgi_pip_executable: '/bin/pip3.9'
+_netbox_uwsgi_mime_file: '/etc/mime.types'

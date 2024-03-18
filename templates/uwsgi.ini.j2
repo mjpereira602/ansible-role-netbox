@@ -1,7 +1,9 @@
 {{ ansible_managed | comment }}
 [uwsgi]
 master=true
+{% if netbox_protocol is defined and netbox_protocol %}
 protocol={{ netbox_protocol }}
+{% endif %}
 uid={{ netbox_user }}
 gid={{ netbox_group }}
 processes={{ netbox_processes }}
@@ -13,9 +15,16 @@ chdir={{ netbox_current_path }}/netbox
 {% else %}
 {% set _base_path = '' %}
 {% endif %}
+{% if _netbox_uwsgi_mime_file %}
+mimefile = {{ _netbox_uwsgi_mime_file }}
+{% endif %}
 static-map=/{{ _base_path }}static={{ netbox_current_path }}/netbox/static
-logger={{ netbox_application_log }}
-req-logger={{ netbox_requests_log }}
+{% for logger in [ netbox_application_log | default([]) ] | flatten %}
+logger={{ logger }}
+{% endfor %}
+{% for req_logger in [ netbox_requests_log | default([]) ] | flatten %}
+req-logger={{ req_logger }}
+{% endfor %}
 {% if netbox_metrics_enabled %}
 env=prometheus_multiproc_dir={{ netbox_metrics_path }}
 {% endif %}

@@ -90,12 +90,12 @@
   notify:
     - reload netbox.service
 
-- name: Install NetBox socket unit file
-  template:
-    src: netbox.socket.j2
-    dest: /lib/systemd/system/netbox.socket
-  notify:
-    - restart netbox.socket
+#- name: Install NetBox socket unit file
+#  template:
+#    src: netbox.socket.j2
+#    dest: /lib/systemd/system/netbox.socket
+#  notify:
+#    - restart netbox.socket
 
 - name: Install NetBox service unit file
   template:
@@ -111,13 +111,14 @@
   notify:
     - restart netbox-rqworker.service
 
+- meta: flush_handlers
+
 - name: Start and enable NetBox' socket and service
   systemd:
     name: "{{ item }}"
     state: started
     enabled: true
   loop:
-    - netbox.socket
     - netbox.service
 
 - name: Start and enable netbox-rqworker.service
