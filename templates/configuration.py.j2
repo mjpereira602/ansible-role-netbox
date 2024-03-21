@@ -107,4 +107,8 @@ METRICS_ENABLED = True
 {%      endif %}
 {% endfor %}
 
+{% if netbox_additional_config is defined %}
+{{ netbox_additional_config }}
+{% endif %}
+
 # vim: ft=python
