@@ -19,6 +19,7 @@ chdir={{ netbox_current_path }}/netbox
 mimefile = {{ _netbox_uwsgi_mime_file }}
 {% endif %}
 static-map=/{{ _base_path }}static={{ netbox_current_path }}/netbox/static
+static-index=index.html
 {% for logger in [ netbox_application_log | default([]) ] | flatten %}
 logger={{ logger }}
 {% endfor %}
