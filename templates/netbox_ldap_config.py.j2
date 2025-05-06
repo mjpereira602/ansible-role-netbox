@@ -1,6 +1,6 @@
 {{ ansible_managed | comment }}
 import ldap
-from django_auth_ldap.config import LDAPSearch, GroupOfNamesType, LDAPGroupQuery
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType, LDAPGroupQuery, NestedGroupOfNamesType
 
 """
 Read the NetBox LDAP configuration documentation if you need assistance:
@@ -39,7 +39,7 @@ AUTH_LDAP_GROUP_SEARCH = LDAPSearch("{{ netbox_ldap_group_search_basedn }}",
                                     ldap.SCOPE_SUBTREE,
                                     "{{ netbox_ldap_group_search_filter }}")
 
-AUTH_LDAP_GROUP_TYPE = GroupOfNamesType()
+AUTH_LDAP_GROUP_TYPE = NestedGroupOfNamesType()
 #AUTH_LDAP_REQUIRE_GROUP = "CN=NETBOX_USERS,DC=example,DC=com"
 
 AUTH_LDAP_FIND_GROUP_PERMS = True
